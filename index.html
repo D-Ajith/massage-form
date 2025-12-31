@@ -11,10 +11,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-    <!-- Toastify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
-    <!-- Toastify JS -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </head>
@@ -84,12 +81,10 @@
 
 
     <script>
-        /* ================= EMAILJS INIT ================= */
         (function () {
             emailjs.init("MzX-Dpj2FuiWV7Tl5");
         })();
 
-        /* ================= CLOCK LOGIC ================= */
         const display = document.getElementById("timeDisplay");
         const hidden = document.getElementById("timeValue");
         const clock = document.getElementById("clock");
@@ -99,17 +94,14 @@
         let selectedHour = null;
         let selectedAmPm = null;
 
-        // open clock
         display.addEventListener("click", () => {
             clock.style.display = "block";
         });
 
-        // close manually
         closeBtn.addEventListener("click", () => {
             clock.style.display = "none";
         });
 
-        // select hour (DO NOT close)
         document.querySelectorAll(".hours span").forEach(hour => {
             hour.addEventListener("click", () => {
                 selectedHour = hour.textContent;
@@ -117,7 +109,6 @@
             });
         });
 
-        // select AM / PM (NOW close)
         document.querySelectorAll(".ampm button").forEach(btn => {
             btn.addEventListener("click", () => {
                 selectedAmPm = btn.dataset.ampm;
@@ -125,13 +116,11 @@
             });
         });
 
-        // show hour preview only
         function updateDisplayOnly() {
             if (!selectedHour) return;
             display.value = `${selectedHour}:00`;
         }
 
-        // final time + close
         function updateFinalTime() {
             if (!selectedHour || !selectedAmPm) return;
 
@@ -139,7 +128,6 @@
             display.value = formatted;
             hidden.value = formatted;
 
-            // ✅ close only after AM/PM selected
             clock.style.display = "none";
         }
         function showToast(message, type = "success") {
@@ -152,7 +140,6 @@
                 stopOnFocus: true
             }).showToast();
         }
-        /* ================= FORM SUBMIT ================= */
         document.getElementById("bookingForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
