@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+   
+    <title>Massage Booking Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+       <h2>Massage Booking Form</h2>
+
+        <form id="bookingForm">
+
+
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="Name" required minlength="3" pattern="[A-Za-z\s]+"
+                title="Name should contain only letters and spaces (min 3 characters)">
+
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="000-000-0000" required pattern="[6-9]{1}[0-9]{9}"
+                title="Enter valid 10-digit Indian mobile number">
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="example@example.com" required>
+
+            <label>Appointment Date</label>
+            <input type="date" name="date" id="appointmentDate" required>
+
+            <label>Time</label>
+
+            <input type="text" id="timeDisplay" placeholder="Select Time" readonly required>
+            <input type="hidden" name="time" id="timeValue">
+
+            <div class="clock" id="clock">
+
+                <div class="clock-header">
+                    <span>Select Time</span>
+                    <button type="button" id="closeClock">✕</button>
+                </div>
+
+                <div class="hours">
+                    <span>1</span><span>2</span><span>3</span><span>4</span>
+                    <span>5</span><span>6</span><span>7</span><span>8</span>
+                    <span>9</span><span>10</span><span>11</span><span>12</span>
+                </div>
+
+                <div class="ampm">
+                    <button type="button" data-ampm="AM">AM</button>
+                    <button type="button" data-ampm="PM">PM</button>
+                </div>
+
+            </div>
+
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" required>
+                    I agree to <span>terms & conditions</span>
+                </label>
+            </div>
+
+            <button type="submit">Schedule Appointment</button>
+
+        </form>
+
+        <p class="footer-text">Confirmation will be sent to your email</p>
+    </div>
+
+
+
+    <script>
+        /* ================= EMAILJS INIT ================= */
+        (function () {
+            emailjs.init("MzX-Dpj2FuiWV7Tl5");
+        })();
+
+        /* ================= CLOCK LOGIC ================= */
+        const display = document.getElementById("timeDisplay");
+        const hidden = document.getElementById("timeValue");
+        const clock = document.getElementById("clock");
+        const closeBtn = document.getElementById("closeClock");
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("appointmentDate").setAttribute("min", today);
+        let selectedHour = null;
+        let selectedAmPm = null;
+
+        // open clock
+        display.addEventListener("click", () => {
+            clock.style.display = "block";
+        });
+
+        // close manually
+        closeBtn.addEventListener("click", () => {
+            clock.style.display = "none";
+        });
+
+        // select hour (DO NOT close)
+        document.querySelectorAll(".hours span").forEach(hour => {
+            hour.addEventListener("click", () => {
+                selectedHour = hour.textContent;
+                updateDisplayOnly();
+            });
+        });
+
+        // select AM / PM (NOW close)
+        document.querySelectorAll(".ampm button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                selectedAmPm = btn.dataset.ampm;
+                updateFinalTime();
+            });
+        });
+
+        // show hour preview only
+        function updateDisplayOnly() {
+            if (!selectedHour) return;
+            display.value = `${selectedHour}:00`;
+        }
+
+        // final time + close
+        function updateFinalTime() {
+            if (!selectedHour || !selectedAmPm) return;
+
+            const formatted = `${selectedHour}:00 ${selectedAmPm}`;
+            display.value = formatted;
+            hidden.value = formatted;
+
+            // ✅ close only after AM/PM selected
+            clock.style.display = "none";
+        }
+        function showToast(message, type = "success") {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                className: `toast-${type}`,
+                stopOnFocus: true
+            }).showToast();
+        }
+        /* ================= FORM SUBMIT ================= */
+        document.getElementById("bookingForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            if (!hidden.value) {
+                // Swal.fire({
+                //     icon: "error",
+                //     title: "Time Required",
+                //     text: "Please select time ⏰",
+                //     confirmButtonText: "OK",
+                //     width: window.innerWidth < 576 ? "260px" : "400px",
+                //     padding: window.innerWidth < 576 ? "0.8em" : "1.5em",
+                // });
+
+                showToast("❌ Please select time ⏰", "error");
+                return;
+            }
+
+            emailjs.sendForm(
+                "service_8yuka1h",
+                "template_ga6ppxh",
+                this
+            ).then(
+                function () {
+                    // Swal.fire({
+                    //     icon: "success",
+                    //     title: "Appointment Confirmed",
+                    //     text: "Your appointment has been booked successfully!",
+                    //     confirmButtonColor: "#16a34a", // green
+                    //     width: window.innerWidth < 576 ? "260px" : "400px",
+                    //     padding: window.innerWidth < 576 ? "0.8em" : "1.5em",
+                    // });
+                    // const isMobile = window.innerWidth < 576;
+
+                    showToast("✅ Appointment confirmed successfully!", "success");
+                    document.getElementById("bookingForm").reset();
+                    clock.style.display = "none";
+                },
+                function (error) {
+                    console.error("EmailJS Error:", error);
+                    // Swal.fire({
+                    //     icon: "error",
+                    //     title: "Email Failed",
+                    //     text: `Email could not be sent. ${error.text}`,
+                    //     confirmButtonColor: "#dc2626", // red
+                    //     width: window.innerWidth < 576 ? "260px" : "400px",
+                    //     padding: window.innerWidth < 576 ? "0.8em" : "1.5em",
+                    // });
+                    // const isMobile = window.innerWidth < 576;
+                    showToast(`❌ Email failed. ${error.text || "Please try again."}`, "error");
+                }
+            );
+        });
+    </script>
+
+
+</body>
+
+</html>
