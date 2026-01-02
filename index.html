@@ -3,79 +3,85 @@
 
 <head>
     <meta charset="UTF-8">
-   
     <title>Massage Booking Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="sweetalert-custom.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-
     <div class="container">
-       <h2>EYWA SPA Booking Form</h2>
-
-        <form id="bookingForm">
-
-
-            <label>Full Name</label>
-            <input type="text" name="name" placeholder="Name" required minlength="3" pattern="[A-Za-z\s]+"
-                title="Name should contain only letters and spaces (min 3 characters)">
-
-            <label>Phone Number</label>
-            <input type="tel" name="phone" placeholder="000-000-0000" required pattern="[6-9]{1}[0-9]{9}"
-                title="Enter valid 10-digit Indian mobile number">
-
-            <label>Email</label>
-            <input type="email" name="email" placeholder="example@example.com" required>
-
-            <label>Appointment Date</label>
-            <input type="date" name="date" id="appointmentDate" required>
-
-            <label>Time</label>
-
-            <input type="text" id="timeDisplay" placeholder="Select Time" readonly required>
-            <input type="hidden" name="time" id="timeValue">
-
-            <div class="clock" id="clock">
-
-                <div class="clock-header">
-                    <span>Select Time</span>
-                    <button type="button" id="closeClock">✕</button>
-                </div>
-
-                <div class="hours">
-                    <span>1</span><span>2</span><span>3</span><span>4</span>
-                    <span>5</span><span>6</span><span>7</span><span>8</span>
-                    <span>9</span><span>10</span><span>11</span><span>12</span>
-                </div>
-
-                <div class="ampm">
-                    <button type="button" data-ampm="AM">AM</button>
-                    <button type="button" data-ampm="PM">PM</button>
-                </div>
-
+        <div class="banner">
+            <div class="banner-content">
+                <img src="./EYWA INTERNACTIONAL THAI SPA Final (1).png" alt="Eywa International Thai Spa Logo"
+                    class="logo" />
+                <h1 style="font-family: 'Cinzel', serif;font-weight: 400;  color: #f5f5f5;">Eywa</h1>
+                <h2 style="font-family: 'Cinzel', serif;font-weight: 400;color: #f5f5f5;"> International Thai Spa</h2>
             </div>
+        </div>
+
+        <div class="formconatiner">
+            <form id="bookingForm">
+                <label>Full Name</label>
+                <input type="text" name="name" placeholder="Enter Your Name" required minlength="3"
+                    pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces (min 3 characters)">
+
+                <label>Phone Number</label>
+                <input type="tel" name="phone" placeholder="Enter your Phone Number" required pattern="[6-9]{1}[0-9]{9}"
+                    title="Enter valid 10-digit Indian mobile number">
+
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter Your Email">
+
+                <label>Appointment Date</label>
+                <input type="date" name="date" id="appointmentDate" required>
+
+                <label>Time</label>
+
+                <input type="text" id="timeDisplay" placeholder="Select Time" readonly required>
+                <input type="hidden" name="time" id="timeValue">
+
+                <div class="clock" id="clock">
+
+                    <div class="clock-header">
+                        <span>Select Time</span>
+                        <button type="button" id="closeClock">✕</button>
+                    </div>
+
+                    <div class="hours">
+                        <span>1</span><span>2</span><span>3</span><span>4</span>
+                        <span>5</span><span>6</span><span>7</span><span>8</span>
+                        <span>9</span><span>10</span><span>11</span><span>12</span>
+                    </div>
+
+                    <div class="ampm">
+                        <button type="button" data-ampm="AM">AM</button>
+                        <button type="button" data-ampm="PM">PM</button>
+                    </div>
+
+                </div>
 
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" required>
-                    I agree to <span>terms & conditions</span>
-                </label>
-            </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" required>
+                        I agree to <span>terms & conditions</span>
+                    </label>
+                </div>
 
-            <button type="submit">Schedule Appointment</button>
+                <button type="submit">Schedule Appointment</button>
 
-        </form>
-
-        <p class="footer-text">Confirmation will be sent to your email</p>
+            </form>
+        </div>
+        <p class="footer-text"><b>© 2026 Eywa International Thai Spa. Crafted with care & wellness.</b> </p>
     </div>
 
 
@@ -130,30 +136,23 @@
 
             clock.style.display = "none";
         }
-        function showToast(message, type = "success") {
-            Toastify({
-                text: message,
-                duration: 3000,
-                gravity: "top",
-                position: "right",
-                className: `toast-${type}`,
-                stopOnFocus: true
-            }).showToast();
-        }
+
         document.getElementById("bookingForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
             if (!hidden.value) {
-                // Swal.fire({
-                //     icon: "error",
-                //     title: "Time Required",
-                //     text: "Please select time ⏰",
-                //     confirmButtonText: "OK",
-                //     width: window.innerWidth < 576 ? "260px" : "400px",
-                //     padding: window.innerWidth < 576 ? "0.8em" : "1.5em",
-                // });
-
-                showToast("❌ Please select time ⏰", "error");
+                Swal.fire({
+                    icon: "error",
+                    title: "Time Required",
+                    text: "Please select time ⏰",
+                    confirmButtonText: "OK",
+                    customClass: {
+                        popup: "custom-swal",
+                        title: "custom-swal-title",
+                        htmlContainer: "custom-swal-text",
+                        confirmButton: "custom-swal-btn"
+                    }
+                });
                 return;
             }
 
@@ -162,39 +161,40 @@
                 "template_ga6ppxh",
                 this
             ).then(
-                function() {
-                    // Swal.fire({
-                    //     icon: "success",
-                    //     title: "Appointment Confirmed",
-                    //     text: "Your appointment has been booked successfully!",
-                    //     confirmButtonColor: "#16a34a", // green
-                    //     width: window.innerWidth < 576 ? "260px" : "400px",
-                    //     padding: window.innerWidth < 576 ? "0.8em" : "1.5em",
-                    // });
-                    // const isMobile = window.innerWidth < 576;
+                function () {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Appointment Confirmed",
+                        text: "Your appointment has been booked successfully!",
+                        customClass: {
+                            popup: "custom-swal",
+                            title: "custom-swal-title",
+                            htmlContainer: "custom-swal-text",
+                            confirmButton: "custom-swal-btn"
+                        }
+                    });
 
-                    showToast("✅ Appointment confirmed successfully!", "success");
                     document.getElementById("bookingForm").reset();
                     clock.style.display = "none";
                 },
                 function (error) {
                     console.error("EmailJS Error:", error);
-                    // Swal.fire({
-                    //     icon: "error",
-                    //     title: "Email Failed",
-                    //     text: `Email could not be sent. ${error.text}`,
-                    //     confirmButtonColor: "#dc2626", // red
-                    //     width: window.innerWidth < 576 ? "260px" : "400px",
-                    //     padding: window.innerWidth < 576 ? "0.8em" : "1.5em",
-                    // });
-                    // const isMobile = window.innerWidth < 576;
-                    showToast(`❌ Email failed. ${error.text || "Please try again."}`, "error");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Email Failed",
+                        text: `Email could not be sent. ${error.text}`,
+                        customClass: {
+                            popup: "custom-swal",
+                            title: "custom-swal-title",
+                            htmlContainer: "custom-swal-text",
+                            confirmButton: "custom-swal-btn"
+                        }
+                    });
+
                 }
             );
         });
     </script>
-
-
 </body>
 
 </html>
