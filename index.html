@@ -10,65 +10,35 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
-
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
+
     <div class="container">
         <div class="banner">
             <div class="banner-content">
-                <img src="./EYWA INTERNACTIONAL THAI SPA Final (1).png" alt="Eywa International Thai Spa Logo"
-                    class="logo" />
-                <h1 style="font-family: 'Cinzel', serif;font-weight: 400;  color: #f5f5f5;">Eywa</h1>
-                <h2 style="font-family: 'Cinzel', serif;font-weight: 400;color: #f5f5f5;"> International Thai Spa</h2>
+                <img src="./EYWA INTERNACTIONAL THAI SPA Final (1).png" class="logo" alt="Eywa Logo">
+                <h1 style="font-family:'Cinzel',serif;color:#f5f5f5;">Eywa</h1>
+                <h2 style="font-family:'Cinzel',serif;color:#f5f5f5;">International Thai Spa</h2>
             </div>
         </div>
 
         <div class="formconatiner">
             <form id="bookingForm">
+
                 <label>Full Name</label>
                 <input type="text" name="name" placeholder="Enter Your Name" required minlength="3"
-                    pattern="[A-Za-z\s]+" title="Name should contain only letters and spaces (min 3 characters)">
+                    pattern="[A-Za-z\s]+">
 
                 <label>Phone Number</label>
-                <input type="tel" name="phone" placeholder="Enter your Phone Number" required pattern="[6-9]{1}[0-9]{9}"
-                    title="Enter valid 10-digit Indian mobile number">
-
-                <label>Email</label>
-                <input type="email" name="email" placeholder="Enter Your Email">
+                <input type="tel" name="phone" placeholder="Enter Your Phone Number" required
+                    pattern="[6-9]{1}[0-9]{9}">
 
                 <label>Appointment Date</label>
                 <input type="date" name="date" id="appointmentDate" required>
-
-                <label>Time</label>
-
-                <input type="text" id="timeDisplay" placeholder="Select Time" readonly required>
-                <input type="hidden" name="time" id="timeValue">
-
-                <div class="clock" id="clock">
-
-                    <div class="clock-header">
-                        <span>Select Time</span>
-                        <button type="button" id="closeClock">✕</button>
-                    </div>
-
-                    <div class="hours">
-                        <span>1</span><span>2</span><span>3</span><span>4</span>
-                        <span>5</span><span>6</span><span>7</span><span>8</span>
-                        <span>9</span><span>10</span><span>11</span><span>12</span>
-                    </div>
-
-                    <div class="ampm">
-                        <button type="button" data-ampm="AM">AM</button>
-                        <button type="button" data-ampm="PM">PM</button>
-                    </div>
-
-                </div>
-
 
                 <div class="checkbox">
                     <label>
@@ -81,71 +51,34 @@
 
             </form>
         </div>
-        <p class="footer-text"><b>© 2026 Eywa International Thai Spa. Crafted with care & wellness.</b> </p>
+
+        <p class="footer-text">
+            <b>© 2026 Eywa International Thai Spa. Crafted with care & wellness.</b>
+        </p>
+
     </div>
-
-
 
     <script>
         (function () {
             emailjs.init("MzX-Dpj2FuiWV7Tl5");
         })();
 
-        const display = document.getElementById("timeDisplay");
-        const hidden = document.getElementById("timeValue");
-        const clock = document.getElementById("clock");
-        const closeBtn = document.getElementById("closeClock");
         const today = new Date().toISOString().split("T")[0];
         document.getElementById("appointmentDate").setAttribute("min", today);
-        let selectedHour = null;
-        let selectedAmPm = null;
-
-        display.addEventListener("click", () => {
-            clock.style.display = "block";
-        });
-
-        closeBtn.addEventListener("click", () => {
-            clock.style.display = "none";
-        });
-
-        document.querySelectorAll(".hours span").forEach(hour => {
-            hour.addEventListener("click", () => {
-                selectedHour = hour.textContent;
-                updateDisplayOnly();
-            });
-        });
-
-        document.querySelectorAll(".ampm button").forEach(btn => {
-            btn.addEventListener("click", () => {
-                selectedAmPm = btn.dataset.ampm;
-                updateFinalTime();
-            });
-        });
-
-        function updateDisplayOnly() {
-            if (!selectedHour) return;
-            display.value = `${selectedHour}:00`;
-        }
-
-        function updateFinalTime() {
-            if (!selectedHour || !selectedAmPm) return;
-
-            const formatted = `${selectedHour}:00 ${selectedAmPm}`;
-            display.value = formatted;
-            hidden.value = formatted;
-
-            clock.style.display = "none";
-        }
 
         document.getElementById("bookingForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
-            if (!hidden.value) {
+            emailjs.sendForm(
+                "service_8yuka1h",
+                "template_ga6ppxh",
+                this
+            ).then(() => {
+
                 Swal.fire({
-                    icon: "error",
-                    title: "Time Required",
-                    text: "Please select time ⏰",
-                    confirmButtonText: "OK",
+                    icon: "success",
+                    title: "Appointment Confirmed",
+                    text: "Your appointment has been booked successfully!",
                     customClass: {
                         popup: "custom-swal",
                         title: "custom-swal-title",
@@ -153,46 +86,23 @@
                         confirmButton: "custom-swal-btn"
                     }
                 });
-                return;
-            }
 
-            emailjs.sendForm(
-                "service_8yuka1h",
-                "template_ga6ppxh",
-                this
-            ).then(
-                function () {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Appointment Confirmed",
-                        text: "Your appointment has been booked successfully!",
-                        customClass: {
-                            popup: "custom-swal",
-                            title: "custom-swal-title",
-                            htmlContainer: "custom-swal-text",
-                            confirmButton: "custom-swal-btn"
-                        }
-                    });
+                this.reset();
+            }, (error) => {
 
-                    document.getElementById("bookingForm").reset();
-                    clock.style.display = "none";
-                },
-                function (error) {
-                    console.error("EmailJS Error:", error);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Email Failed",
-                        text: `Email could not be sent. ${error.text}`,
-                        customClass: {
-                            popup: "custom-swal",
-                            title: "custom-swal-title",
-                            htmlContainer: "custom-swal-text",
-                            confirmButton: "custom-swal-btn"
-                        }
-                    });
-
-                }
-            );
+                Swal.fire({
+                    icon: "error",
+                    title: "Submission Failed",
+                    text: "Something went wrong. Please try again.",
+                    customClass: {
+                        popup: "custom-swal",
+                        title: "custom-swal-title",
+                        htmlContainer: "custom-swal-text",
+                        confirmButton: "custom-swal-btn"
+                    }
+                });
+                console.error("EmailJS Error:", error);
+            });
         });
     </script>
 </body>
